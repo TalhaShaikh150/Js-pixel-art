@@ -4,66 +4,139 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixel Art</title>
-  <link rel="icon" type="image/png" href="./favicon-16x16.png">
+  <link rel="icon" type="image/png" href="./assets/favicon-16x16.png">
 
 </head>
 <body>
   <style>
-    *{
+    * {
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-   
-    .canvas-container{
-      display: flex;
-      justify-content: center;
-    align-items: center;
-    height: 80vh;
-
-    }
-    .canvas{
       box-sizing: border-box;
-      border-radius: 8px;
-      border: 3px solid black;
-      width: 550px;
-      height: 60vh;
     }
-    .row{
+
+    body {
+      background: #f0f2f5;
+      min-height: 100vh;
+    }
+
+    .canvas-container {
       display: flex;
+      justify-content: space-around;
+      align-items: center;
+      min-height: 70vh;
+      padding: 20px;
     }
-    .box{
-      width: 4%;
-      height: 3.1vh;
+    img{
+      max-width: 20%;
+    }
+
+    .canvas {
+      background: white;
+      border-radius: 12px;
+      border: 2px solid #125bc9;
+      box-shadow: 0 4px 12px rgba(18, 91, 201, 0.1);
+      width: 640px;
+      max-width: 90%;
+      height: 63.5vh;
+    }
+
+    .row {
+      display: flex;
+      height: calc(100% / 18);
+    }
+
+    .box {
+      flex: 1;
+      border: 1px solid rgba(18, 91, 201, 0.1);
       cursor: pointer;
-      border: 1px solid black;
-      transition: ease 0.2s;
+      transition: all 0.2s ease;
     }
- 
-    input{
-      margin: 0 auto;
-      display: block;
+
+    .box:hover {
+      transform: scale(1.05);
+      z-index: 1;
     }
-    button{
-      display: block;
-      padding: 16px 30px;
-      background-color: #201e1e;
+
+    .controls {
+      width: 80%;
+      display: flex;
+      gap: 15px;
+      justify-content: end;
+      gap: 20px;
+      margin: 20px auto;
+      flex-wrap: wrap;
+    }
+
+    input[type="color"] {
+      width: 50px;
+      height: 50px;
+      border: 2px solid #125bc9;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 3px;
+      background: white;
+    }
+
+    button {
+      padding: 12px 24px;
+      background: #125bc9;
       color: white;
       border: none;
-      margin: 20px auto;
+
+      font-size: 1.1em;
       border-radius: 8px;
-      font-weight: bold;
-      transition: 0.3s all ease;
+      font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
     }
-    button:hover{
-      color: #fff;
-      background-color: #757575;
+
+    button:hover {
+      background: #0f4aa3;
+      transform: translateY(-2px);
     }
-  
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .color-picker-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      padding: 10px 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h3{
+     text-align: center;
+     margin-left: 36%;
+    }
+
+    @media (max-width: 600px) {
+      .canvas {
+        height: 50vh;
+      }
+      
+      button {
+        padding: 10px 18px;
+        font-size: 14px;
+      }
+      
+      .color-picker-container {
+        padding: 8px 12px;
+      }
+    }
+</style>
+<div class="canvas-container">
+    <img src="./assets/deadpool.png" id="characters" alt="">
     
-  </style>
-  <div class="canvas-container">
+    
     <div class="canvas">
       <!--Row-1-->
       <div class="row">
@@ -713,38 +786,65 @@
         <div class="box"></div>
         <div class="box"></div>
       </div>
+        <!--Row-18-->
+       
     </div>
     </div>
-      <input type="color" name="" id="color-selector">
-      <div class="colors-container">
-        
+    <div class="controls">
+      <div class="color-picker-container">
+        <input type="color" id="color-selector">
+        <span>🎨 Current Color</span>
       </div>
-      <input type="checkbox" class="spray">
+      <button class="clear">🧹 Clear Canvas</button>
+      <button class="spray">🌀 Spray Mode</button>
+     
+      
+    </div>
+    <h3>Double Click To Remove Pixel</h3> 
+    
     <script>
-      const boxes = document.querySelectorAll('.box')
+      let boxes = document.querySelectorAll('.box')
 
       const color = document.getElementById('color-selector')
-      const sprayColor = document.querySelector('.spray')
-      
+    const clearCanvas = document.querySelector('.clear')
+    const spray = document.querySelector('.spray')
 
-      for(let i = 0; i < boxes.length; i++){
+    
+      
+        for(let i = 0; i < boxes.length; i++){    
+        boxes[i].addEventListener('click',function(){
+          boxes[i].style.backgroundColor = color.value
+        })  
         
-        boxes[i].addEventListener('click',function fillColor(){
-          boxes[i].style.backgroundColor = color.value
-          })        
-          
-          boxes[i].addEventListener('dblclick',function(){
-            boxes[i].style.backgroundColor = ""
-          })
-          
-          if(sprayColor.checked === true){
-        boxes[i].addEventListener('mouseover',function(){
-          boxes[i].style.backgroundColor = color.value
-          })
+        boxes[i].addEventListener('dblclick',function(){
+          boxes[i].style.backgroundColor = ""
+        })
+        
       }
+
       
+      //For Clearing The Canvas
+      clearCanvas.addEventListener('click',function(){
+          for(let j = 0; j < boxes.length; j++){
+           boxes[j].style.backgroundColor = ""
+          }
+      })
+
+      //For Spraying Mode
+      spray.addEventListener('click',function(){
+        
+        for(let k = 0; k < boxes.length;k++){
+            boxes[k].addEventListener('mouseover',function(){
+              boxes[k].style.backgroundColor = color.value
+            })          
+        }
+      })
+
+      const Character = document.getElementById('characters')
+      let random  = Math.floor(Math.random() * 2 + 1)
+      Character.src = `./assets/ch${random}.png`
       
-}
+    
     </script>
 </body>
 </html>
